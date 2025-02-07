@@ -3,6 +3,7 @@ const GRID_SIZE = 6
 let level = "Easy"
 document.getElementById("currLevel").innerHTML = level
 
+let grid = [GRID_SIZE]
 
 class Cell{
     constructor(){
@@ -19,7 +20,6 @@ class Cell{
     }
 }
 
-let grid = [GRID_SIZE]
 
 function changeMode(){
     level = document.getElementById("level").value
@@ -48,7 +48,17 @@ function fillGrid(){
     else{
         setBombs(6)
     }
-    displayGrid()
+
+    let html = ``
+    for(let i = 0; i < GRID_SIZE; i++){
+        html += `<tr>`
+        for(let j = 0; j < GRID_SIZE; j++){
+            html += `<td><button class="cell" id="button${i}:${j}" onclick="clickCell(${i}, ${j})"></button></td>`
+        }
+        html += `</tr>`
+    }
+
+    document.getElementById("grid").innerHTML = html  
 }
 
 function setBombs(count){
@@ -62,34 +72,21 @@ function setBombs(count){
     }
 }
 
-function displayGrid(){
-    let html = ``
-    for(let i = 0; i < GRID_SIZE; i++){
-        html += `<tr>`
-        for(let j = 0; j < GRID_SIZE; j++){
-            html += `<td><button class="cell" id="button${i}:${j}" onclick="clickCell(${i}, ${j})"></button></td>`
-        }
-        html += `</tr>`
-    }
-
-    document.getElementById("grid").innerHTML = html  
-}
-
 function clickCell(row, col){
-    if(!grid[row][col].isClicked){
-        grid[row][col].click()
-    }
+    grid[row][col].click()
+
+    let element = document.getElementById(`button${row}:${col}`)
 
     if(grid[row][col].hasBomb){
-        document.getElementById(`button${row}:${col}`).style.backgroundColor = "red"
-        gameOver()
+        element.style.backgroundColor = "red"
+        gameLost()
     }
     else{
-        document.getElementById(`button${row}:${col}`).style.backgroundColor = "green"
+        element.style.backgroundImage = "url(gem.png)"
     }
 }
 
-function gameOver(){
+function gameLost(){
     for(let i = 0; i< GRID_SIZE; i++){
         for(let j = 0; j<GRID_SIZE; j++){
             let cell = document.getElementById(`button${i}:${j}`)
@@ -97,16 +94,17 @@ function gameOver(){
             setTimeout(function() {
                 if(grid[i][j].hasBomb){
                     cell.style.backgroundColor = "red"
+                } 
+                else{
+                    cell.style.backgroundColor = "rgb(18, 88, 24)"
                 }
-            }, 1000);
-            
+            }, 1000); 
         }
     }
 
     let result = document.getElementById("result")
-    result.innerHTML = "BOOM! YOU HIT A BOMB AND LOST!"
+    result.innerHTML = "BOOM! YOU HIT A MINE AND LOST!"
     result.style.color = "red"
 }
 
 fillGrid()
-
