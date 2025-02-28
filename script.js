@@ -1,9 +1,20 @@
 const GRID_SIZE = 6
+const EASY = 1
+const MEDIUM = 2
+const HARD = 4
+const EXTRAHARD = 6
+
+var balance = 500
+document.getElementById('balanceAmount').innerHTML = `$${balance}`
 
 let level = "Easy"
 document.getElementById("currLevel").innerHTML = level
 
+let explosionAudio = document.getElementById("boom")
+
 let grid = [GRID_SIZE]
+
+let tempBalance = 0
 
 class Cell{
     constructor(){
@@ -25,7 +36,13 @@ function changeMode(){
     level = document.getElementById("level").value
     document.getElementById("currLevel").innerHTML = level
     document.getElementById("result").innerHTML = ""
-    fillGrid()
+    if(confirm(`Do you wanna start a new ${level.toUpperCase()} game?`) && balance >= 30){
+        balance -= 30
+        document.getElementById('balanceAmount').innerHTML = `$${balance}`
+        document.getElementById('grid').style.display = 'block'
+        document.getElementById('levelDisplay').style.display = 'block'
+        fillGrid()  
+    }
 }
 
 function fillGrid(){
@@ -37,16 +54,16 @@ function fillGrid(){
     }
 
     if(level === "Easy"){
-        setBombs(1)
+        setBombs(EASY)
     }
     else if(level === "Medium"){
-        setBombs(2)
+        setBombs(MEDIUM)
     }
     else if(level === "Hard"){
-        setBombs(4)
+        setBombs(HARD)
     }
     else{
-        setBombs(6)
+        setBombs(EXTRAHARD)
     }
 
     let html = ``
@@ -72,17 +89,39 @@ function setBombs(count){
     }
 }
 
-function clickCell(row, col){
-    grid[row][col].click()
-
-    let element = document.getElementById(`button${row}:${col}`)
-
-    if(grid[row][col].hasBomb){
-        element.style.backgroundColor = "red"
-        gameLost()
+function addMoney(){
+    if(level === "Easy"){
+        tempBalance += EASY
+        balance += EASY
+    } else if(level === "Medium"){
+        tempBalance += MEDIUM
+        balance += MEDIUM
+    } else if(level === "Hard"){
+        tempBalance += HARD
+        balance += HARD
+    } else{
+        tempBalance += EXTRAHARD
+        balance += EXTRAHARD
     }
-    else{
-        element.style.backgroundImage = "url(gem.png)"
+    document.getElementById('balanceAmount').innerHTML = `$${balance}`
+}
+
+function clickCell(row, col){
+    if(!grid[row][col].isClicked){
+        grid[row][col].click()
+
+        let cell = document.getElementById(`button${row}:${col}`)
+
+        if(grid[row][col].hasBomb){
+            cell.style.backgroundColor = "red"
+            cell.style.backgroundImage = "url(media/mine.png)"
+            explosionAudio.play()
+            gameLost()
+        }
+        else{
+            cell.style.backgroundImage = "url(media/gem.png)"
+            addMoney()
+        }
     }
 }
 
@@ -94,6 +133,7 @@ function gameLost(){
             setTimeout(function() {
                 if(grid[i][j].hasBomb){
                     cell.style.backgroundColor = "red"
+                    cell.style.backgroundImage = "url(media/mine.png)"
                 } 
                 else{
                     cell.style.backgroundColor = "rgb(18, 88, 24)"
@@ -102,9 +142,11 @@ function gameLost(){
         }
     }
 
+    balance -= tempBalance
+    document.getElementById('balanceAmount').innerHTML = `$${balance}`
+    tempBalance = 0
+
     let result = document.getElementById("result")
     result.innerHTML = "BOOM! YOU HIT A MINE AND LOST!"
     result.style.color = "red"
 }
-
-fillGrid()

@@ -9,25 +9,29 @@
 </head>
 <body>
     <h1>MINES CASINO</h1>
-    <!-- <h3>Balance: <span id="balance"></span></h3> -->
-    <div class="level-selection">
-        <label for="level">Choose a Mode:</label>
-        <select name="level" id="level">
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-            <option value="Extra Hard">Extra Hard</option>
-        </select>
-        <button onclick="changeMode()">START</button>
-    </div>
+    <main>
+        <h3 id="result"></h3>
+        <section>        
+            <div class="level-selection">
+                <label for="level">Choose a Level:</label>
+                <select name="level" id="level">
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                    <option value="Extra Hard">Extra Hard</option>
+                </select>
+            </div> 
 
-    <h3>Level: <span id="currLevel"></span></h3>
+            <button id="start" onclick="changeMode()">PLAY</button>
 
+            <h3 id="levelDisplay">Level: <span id="currLevel"></span></h3>
 
-    <table id="grid"></table>
+            <table id="grid"></table>
+        </section>
+        <h3 id="balance">Balance: <br><span id="balanceAmount"></span></h3>
+    </main>
 
-
-    <h3 id="result"></h3>
+    <audio src="media/explosion.mp3" id="boom"></audio>
 
     <script src="script.js"></script>
 </body>
