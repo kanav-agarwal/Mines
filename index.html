@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mines</title>
+    <title>Mines Casino</title>
+    <link rel="icon" type="image/x-icon" href="media/crown.png">    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>MINES CASINO</h1>
     <main>
-        <h3 id="result"></h3>
+        <button id="cash-out" onclick="cashOut()">Cash Out</button>
         <section>        
             <div class="level-selection">
                 <label for="level">Choose a Level:</label>
@@ -30,8 +31,14 @@
         </section>
         <h3 id="balance">Balance: <br><span id="balanceAmount"></span></h3>
     </main>
+    <h3 id="result">BOOM! YOU HIT A MINE AND LOST!</h3>
+
 
     <audio src="media/explosion.mp3" id="boom"></audio>
+    <audio src="media/coin.mp3" id="coin"></audio>
+
+    <audio src="media/mario.mp3" id="mario"></audio>
+
 
     <script src="script.js"></script>
 </body>
