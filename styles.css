@@ -9,6 +9,7 @@ body{
 }
 
 h1{
+    text-align: center;
     font-size: 4rem;
     letter-spacing: 5px;
     margin-left: auto;
@@ -31,6 +32,7 @@ main{
     color: white;
     font-size: 1.5em;
     border: 2px solid white;
+    margin: 1em 0;
 }
 
 #result{
@@ -42,8 +44,7 @@ main{
     top: 50%;
     left: 0;
     right: 0;
-    margin: auto;
-    
+    margin: auto;   
 }
 
 .level-selection{
@@ -86,4 +87,11 @@ main{
 
 #balanceAmount{
     font-size: 4em;
+}
+
+@media(max-width: 768px){
+    main{
+        grid-template-columns: none;
+        grid-template-rows: repeat(3, auto);
+    }
 }
