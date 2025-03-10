@@ -34,23 +34,19 @@ class Cell{
     }
 }
 
-// function playSound(soundFile) {
-//     const audio = new Audio(soundFile);
-//     audio.play().catch(e => console.log("Autoplay blocked:", e));
-// }
-
-function changeMode(){
+function play(){
     level = document.getElementById("level").value
     document.getElementById("currLevel").innerHTML = level
     document.getElementById("result").style.display = "none"
-    if(balance < ATTEMPT_COST) 
+    if(balance < ATTEMPT_COST){
         alert("Not enough money to start a new game 😂");
-
+    }
     else if(confirm(`Do you wanna start a new ${level.toUpperCase()} game?`)){
         balance -= 30
         document.getElementById('balanceAmount').innerHTML = `$${balance}`
         document.getElementById('grid').style.display = 'block'
         document.getElementById('levelDisplay').style.display = 'block'
+        document.getElementById("cash-out").style.disabled = "disabled"
         fillGrid()  
     }
 }
@@ -159,25 +155,29 @@ function displayBoard(){
 }
 
 function gameLost(){
+    document.getElementById("cash-out").style.disabled = "disabled"
     displayBoard()
-
     balance -= tempBalance
     document.getElementById('balanceAmount').innerHTML = `$${balance}`
-    tempBalance = 0
-
-    setTimeout(function() {
-        document.getElementsByTagName("main")[0].style.filter = "blur(15px)"
-        document.getElementById("result").style.display = "block"
-        document.getElementsByTagName("body")[0].addEventListener("click", function(){
-            document.getElementsByTagName("main")[0].style.filter = "none"
-            document.getElementById("result").style.display = "none"
-        })
-
-    }, 2000)
+    showResult("BOOM! YOU HIT A MINE AND LOST!", "red", "3em")
 }
 
 function cashOut(){
     displayBoard()
-    tempBalance = 0
-    document.getElementById("cash-out").style.disabled = "disabled"
+    showResult(`You won $${tempBalance}!`, "gold", "5em")
+}
+
+function showResult(message, color, size){
+    setTimeout(function() {
+        document.getElementsByTagName("main")[0].style.filter = "blur(15px) brightness(75%)"
+        document.getElementById("result").innerHTML = message
+        document.getElementById("result").style.display = "block"
+        document.getElementById("result").style.color = color
+        document.getElementById("result").style.fontSize = size
+        document.getElementsByTagName("body")[0].addEventListener("click", function(){
+            document.getElementsByTagName("main")[0].style.filter = "none"
+            document.getElementById("result").style.display = "none"
+        })
+        tempBalance = 0;
+    }, 2000)
 }
