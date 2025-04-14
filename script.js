@@ -6,6 +6,9 @@ const HARD = 4
 const EXTRAHARD = 6
 
 var balance = 500
+if (localStorage.getItem("balance")) {                
+    balance = localStorage.getItem("balance");
+}
 document.getElementById('balanceAmount').innerHTML = `$${balance}`
 
 let level = "Easy"
@@ -155,19 +158,24 @@ function displayBoard(){
 }
 
 function gameLost(){
+    document.getElementById("start").style.disabled = "disabled"
     document.getElementById("cash-out").style.disabled = "disabled"
     displayBoard()
     balance -= tempBalance
     document.getElementById('balanceAmount').innerHTML = `$${balance}`
     showResult("BOOM! YOU HIT A MINE AND LOST!", "red", "3em")
+    document.getElementById("start").style.disabled = "none"
 }
 
 function cashOut(){
+    document.getElementById("start").style.disabled = "disabled"
+    document.getElementById("cash-out").style.disabled = "disabled"
     displayBoard()
     showResult(`You won $${tempBalance}!`, "gold", "5em")
 }
 
 function showResult(message, color, size){
+    localStorage.setItem("balance", balance);
     setTimeout(function() {
         document.getElementsByTagName("main")[0].style.filter = "blur(15px) brightness(75%)"
         document.getElementById("result").innerHTML = message
@@ -178,6 +186,8 @@ function showResult(message, color, size){
             document.getElementsByTagName("main")[0].style.filter = "none"
             document.getElementById("result").style.display = "none"
         })
+        document.getElementById("cash-out").style.disabled = "none"
+        document.getElementById("start").style.disabled = "disabled"
         tempBalance = 0;
     }, 2000)
 }
